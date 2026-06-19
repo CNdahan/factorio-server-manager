@@ -55,8 +55,9 @@ steamcmd +login anonymous +force_install_dir /opt/factorio +app_update 739590 +q
 从 [factorio.com/download](https://factorio.com/download) 下载 Linux 无头服务器包，解压到目标目录：
 
 ```bash
-tar -xzf factorio_headless_x64_*.tar.xz -C /opt/factorio
+tar -xf factorio_headless_x64_*.tar.xz -C /opt/factorio
 ```
+> 注意：`.tar.xz` 用 `-J` (xz) 解压，或直接用 `-xf` 让 tar 自动检测格式，**不要加 `-z`**（那是 gzip 用的）。
 
 安装后确认二进制文件存在：
 ```bash
