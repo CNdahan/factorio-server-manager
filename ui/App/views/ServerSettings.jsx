@@ -1,5 +1,6 @@
 import Panel from "../components/Panel";
 import React, {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import settingsResource from "../../api/resources/settings";
 import Input from "../components/Input";
 import Label from "../components/Label";
@@ -10,6 +11,7 @@ import {useForm} from "react-hook-form";
 
 const ServerSettings = () => {
 
+    const {t} = useTranslation();
     const [settings, setSettings] = useState();
     const [numberInputs, setNumberInputs] = useState([]);
 
@@ -36,7 +38,7 @@ const ServerSettings = () => {
        settingsResource.server.update(data)
            .then(() => {
                fetchSettings()
-                   .then(() => window.flash("Settings saved.", "green"))
+                   .then(() => window.flash(t('serverSettings.saved'), "green"))
            });
     }
 
@@ -101,7 +103,7 @@ const ServerSettings = () => {
                 } else if (name.includes("visibility")) {
                     return (
                         <>
-                            <Label text="Visibility"/>
+                            <Label text={t('serverSettings.visibility')}/>
                             <div className="flex">
                                 {Object.keys(value).map(key => <div className="mr-4" key={`visibility-${key}`}>
                                     <Checkbox checked={value[key]} register={register} text={key} name={`visibility[${key}]`}/>
@@ -124,7 +126,7 @@ const ServerSettings = () => {
     return (
         <form className="mb-4" onSubmit={handleSubmit(saveServerSettings)}>
             <Panel
-                title="Server Settings"
+                title={t('serverSettings.title')}
                 content={
                     <>
                         {settings && Object.keys(settings).map(key => {
@@ -150,7 +152,7 @@ const ServerSettings = () => {
                     </>
                 }
                 actions={
-                    <Button isSubmit={true} type="success">Save</Button>
+                    <Button isSubmit={true} type="success">{t('common.save')}</Button>
                 }
             />
         </form>

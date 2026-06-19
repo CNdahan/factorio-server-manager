@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
+import {useTranslation} from "react-i18next";
 import user from "../../api/resources/user";
 import Button from "../components/Button";
 import {useLocation, useNavigate} from "react-router";
@@ -10,6 +11,7 @@ import {Flash} from "../components/Flash";
 import Error from "../components/Error";
 
 const Login = ({handleLogin}) => {
+    const {t} = useTranslation();
     const {register, handleSubmit, formState: { errors }} = useForm();
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,7 +25,7 @@ const Login = ({handleLogin}) => {
             }
         } catch (e) {
             console.log(e);
-            window.flash("Login failed. Username or Password wrong.", "red");
+            window.flash(t('login.loginFailed'), "red");
             throw e;
         }
     };
@@ -42,25 +44,25 @@ const Login = ({handleLogin}) => {
     return (
         <div className="h-screen overflow-hidden flex items-center justify-center bg-black">
             <Panel
-                title="Login"
+                title={t('login.title')}
                 content={
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-4">
-                            <Label text="Username" htmlFor="username"/>
-                            <Input register={register('username', {required: true})} placeholder="Username"/>
-                            <Error error={errors.username} message="Username is required"/>
+                            <Label text={t('login.username')} htmlFor="username"/>
+                            <Input register={register('username', {required: true})} placeholder={t('login.username')}/>
+                            <Error error={errors.username} message={t('login.usernameRequired')}/>
                         </div>
                         <div className="mb-6">
-                            <Label text="Password" htmlFor="password"/>
+                            <Label text={t('login.password')} htmlFor="password"/>
                             <Input
                                 register={register('password',{required: true})}
                                 type="password"
-                                placeholder="******************"
+                                placeholder={t('login.passwordPlaceholder')}
                             />
-                            <Error error={errors.password} message="Password is required"/>
+                            <Error error={errors.password} message={t('login.passwordRequired')}/>
                         </div>
                         <div className="text-center">
-                            <Button type="success" className="w-full" isSubmit={true}>Sign In</Button>
+                            <Button type="success" className="w-full" isSubmit={true}>{t('login.signIn')}</Button>
                         </div>
                     </form>
                 }

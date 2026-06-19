@@ -1,5 +1,6 @@
 import Panel from "../../components/Panel";
 import React, {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import user from "../../../api/resources/user";
 import CreateUserForm from "./components/CreateUserForm";
 import ChangePasswordForm from "./components/ChangePasswordForm"
@@ -8,6 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const UserManagement = () => {
 
+    const {t} = useTranslation();
     const [users, setUsers] = useState([]);
 
     const updateList = useCallback(async () => {
@@ -29,15 +31,15 @@ const UserManagement = () => {
     return (
         <>
             <Panel
-                title="List of Users"
+                title={t('userManagement.title')}
                 content={
                     <table className="w-full">
                         <thead>
                         <tr className="text-left py-1">
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Email</th>
-                            <th>Actions</th>
+                            <th>{t('common.name')}</th>
+                            <th>{t('common.role')}</th>
+                            <th>{t('common.email')}</th>
+                            <th>{t('common.actions')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,12 +59,12 @@ const UserManagement = () => {
                 className="mb-4"
             />
             <Panel
-                title="Change Password"
+                title={t('userManagement.changePassword')}
                 content={<ChangePasswordForm/>}
                 className="mb-4"
             />
             <Panel
-                title="Create User"
+                title={t('userManagement.createUser')}
                 content={<CreateUserForm updateUserList={updateList}/>}
                 className="mb-4"
             />

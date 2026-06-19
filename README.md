@@ -24,6 +24,22 @@ This tool runs on a Factorio server and allows management of the Factorio server
 #### Manage mods
 ![Factorio Server Manager Screenshot](screenshots/Screenshot_Mods.png)
 
+## 🌐 Internationalization / 国际化
+
+FSM now supports multiple languages via `react-i18next`. The UI will automatically display in your browser's preferred language.
+
+Currently supported languages:
+- 🇨🇳 **中文 (Chinese)** — default fallback
+- 🇬🇧 **English**
+
+### Adding a new language
+
+1. Create a new translation file at `ui/locales/<lang>/translation.json` (copy from `en/` as a template)
+2. Add the language to the `resources` object in `ui/i18n.js`
+3. Rebuild the frontend: `npm run dev`
+
+Translation files are organized by module (`nav`, `login`, `controls`, `saves`, `mods`, etc.) for easy maintenance.
+
 ## [Installation and Usage](https://github.com/OpenFactorioServerManager/factorio-server-manager/wiki/Installation-and-Usage)
 
 ## [Development](https://github.com/OpenFactorioServerManager/factorio-server-manager/wiki/Development)

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import savesResource from "../../../../api/resources/saves";
 import Select from "../../../components/Select";
 import Label from "../../../components/Label";
@@ -11,6 +12,7 @@ import ConfirmDialog from "../../../components/ConfirmDialog";
 
 const LoadMods = ({refreshMods}) => {
 
+    const {t} = useTranslation();
     const [saves, setSaves] = useState([]);
     const {register, reset, handleSubmit} = useForm();
     const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +57,7 @@ const LoadMods = ({refreshMods}) => {
 
     return isFactorioAuthenticated
         ? <form onSubmit={handleSubmit(loadModsRequested)}>
-            <Label text="Save" htmlFor="save"/>
+            <Label text={t('mods.saveLabel')} htmlFor="save"/>
             <Select
                 register={register('save')}
                 className="mb-4"
@@ -65,10 +67,10 @@ const LoadMods = ({refreshMods}) => {
                     value: save.name
                 }))}
             />
-            <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>Load</Button>
+            <Button isSubmit={true} isDisabled={isDisabled} isLoading={isLoading}>{t('common.load')}</Button>
             <ConfirmDialog
-                title="Load Mods from Save"
-                content={`Loading the Mods from Save "${loadModsData?.save}" will remove all currently installed Mods.`}
+                title={t('mods.loadModsFromSaveTitle')}
+                content={t('mods.loadModsConfirm', { save: loadModsData?.save })}
                 isOpen={loadModsData !== undefined}
                 close={() => {
                     setIsLoading(false);
