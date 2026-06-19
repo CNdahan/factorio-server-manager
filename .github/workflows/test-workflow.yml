@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - '**'
+permissions:
+  contents: write
 env:
   factorio_password: ${{ secrets.FACTORIO_PASSWORD }}
   factorio_username: ${{ secrets.FACTORIO_USERNAME }}
