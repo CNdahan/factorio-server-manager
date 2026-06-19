@@ -97,12 +97,12 @@ jobs:
       - name: Build Linux & Windows release packages
         run: make gen_release
       - name: Upload Linux release artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: factorio-server-manager-linux
           path: build/factorio-server-manager-linux.zip
       - name: Upload Windows release artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: factorio-server-manager-windows
           path: build/factorio-server-manager-windows.zip
