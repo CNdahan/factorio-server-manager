@@ -96,13 +96,36 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib gcc-mingw-w64 g++-mingw-w64
       - name: Build Linux & Windows release packages
         run: make gen_release
-      - name: Upload Linux release
+      - name: Upload Linux release artifact
         uses: actions/upload-artifact@v3
         with:
           name: factorio-server-manager-linux
           path: build/factorio-server-manager-linux.zip
-      - name: Upload Windows release
+      - name: Upload Windows release artifact
         uses: actions/upload-artifact@v3
         with:
           name: factorio-server-manager-windows
           path: build/factorio-server-manager-windows.zip
+      - name: Create/Update GitHub Release (latest)
+        uses: ncipollo/release-action@v1
+        with:
+          tag: latest
+          name: "Latest Build"
+          body: |
+            > ⚡ 自动构建于每次 push，随 `develop` 分支更新。
+
+            | 平台 | 文件 |
+            |------|------|
+            | 🐧 Linux (amd64) | `factorio-server-manager-linux.zip` |
+            | 🪟 Windows (amd64) | `factorio-server-manager-windows.zip` |
+
+            ### 使用方法
+            1. 下载对应平台的 zip 包
+            2. 解压到你的 Factorio 服务器目录
+            3. 编辑 `conf.json` 配置文件
+            4. 运行 `./factorio-server-manager`（Linux）或 `factorio-server-manager.exe`（Windows）
+          artifacts: "build/factorio-server-manager-linux.zip,build/factorio-server-manager-windows.zip"
+          allowUpdates: true
+          generateReleaseNotes: false
+          removeArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
