@@ -262,50 +262,6 @@ var apiRoutes = Routes{
 		UpdateServerSettings,
 		false,
 	},
-	// Mod Portal Stuff
-	{
-		"ModPortalListAllMods",
-		"GET",
-		"/mods/portal/list",
-		ModPortalListModsHandler,
-		false,
-	}, {
-		"ModPortalGetModInfo",
-		"GET",
-		"/mods/portal/info/{mod}",
-		ModPortalModInfoHandler,
-		false,
-	}, {
-		"ModPortalInstallMod",
-		"POST",
-		"/mods/portal/install",
-		ModPortalInstallHandler,
-		true,
-	}, {
-		"ModPortalLogin",
-		"POST",
-		"/mods/portal/login",
-		ModPortalLoginHandler,
-		false,
-	}, {
-		"ModPortalLoginStatus",
-		"GET",
-		"/mods/portal/loginstatus",
-		ModPortalLoginStatusHandler,
-		false,
-	}, {
-		"ModPortalLogout",
-		"GET",
-		"/mods/portal/logout",
-		ModPortalLogoutHandler,
-		false,
-	}, {
-		"ModPortalInstallMultiple",
-		"POST",
-		"/mods/portal/install/multiple",
-		ModPortalInstallMultipleHandler,
-		true,
-	},
 	// Mods Stuff
 	{
 		"ListInstalledMods",
@@ -330,12 +286,6 @@ var apiRoutes = Routes{
 		"POST",
 		"/mods/delete/all",
 		ModDeleteAllHandler,
-		true,
-	}, {
-		"UpdateMod",
-		"POST",
-		"/mods/update",
-		ModUpdateHandler,
 		true,
 	}, {
 		"UploadMod",
@@ -408,28 +358,10 @@ var apiRoutes = Routes{
 		ModPackModDeleteAllHandler,
 		false,
 	}, {
-		"ModPackUpdateMod",
-		"POST",
-		"/mods/packs/{modpack}/mod/update",
-		ModPackModUpdateHandler,
-		false,
-	}, {
 		"ModPackUploadMod",
 		"POST",
 		"/mods/packs/{modpack}/mod/upload",
 		ModPackModUploadHandler,
-		false,
-	}, {
-		"ModPackModPortalInstallMod",
-		"POST",
-		"/mods/packs/{modpack}/portal/install",
-		ModPackModPortalInstallHandler,
-		false,
-	}, {
-		"ModPackModPortalInstallMultiple",
-		"POST",
-		"/mods/packs/{modpack}/portal/install/multiple",
-		ModPackModPortalInstallMultipleHandler,
 		false,
 	},
 }

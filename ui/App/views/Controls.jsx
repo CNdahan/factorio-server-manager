@@ -96,7 +96,7 @@ const Controls = ({serverStatus}) => {
                                     type="number"
                                     min={1}
                                     max={65535}
-                                    defaultValue={"34197"}
+                                    defaultValue={serverStatus.port ? String(serverStatus.port) : "34197"}
                                     disabled={isDisabled}
                                     register={register('port',{required: true, min: 1, max: 65535})}
                                 />

@@ -13,9 +13,8 @@ const ServerSettings = () => {
 
     const {t} = useTranslation();
     const [settings, setSettings] = useState();
-    const [numberInputs, setNumberInputs] = useState([]);
 
-    const {register, handleSubmit, formState: {errors}, control} = useForm();
+    const {register, handleSubmit, formState: {errors}} = useForm();
 
     const fetchSettings = async () => {
         const res = await settingsResource.server.list();
@@ -23,105 +22,100 @@ const ServerSettings = () => {
     };
 
     const saveServerSettings = data => {
-        data.tags = data.tags.split(',');
-        data.admins = data.admins.split(',');
-
-        numberInputs.forEach(numberInput => {
-            data[numberInput] = parseInt(data[numberInput]);
-        });
-
-        Object.keys(settings).map(key => {
+        // Convert array fields
+        if (data.tags !== undefined) {
+            data.tags = typeof data.tags === 'string' ? data.tags.split(',').map(s => s.trim()).filter(Boolean) : data.tags;
+        }
+        if (data.admins !== undefined) {
+            data.admins = typeof data.admins === 'string' ? data.admins.split(',').map(s => s.trim()).filter(Boolean) : data.admins;
+        }
+        // Keep _comment fields from original settings
+        Object.keys(settings).forEach(key => {
             if (key.startsWith("_comment")) {
                 data[key] = settings[key];
             }
         });
-       settingsResource.server.update(data)
-           .then(() => {
-               fetchSettings()
-                   .then(() => window.flash(t('serverSettings.saved'), "green"))
-           });
-    }
+        settingsResource.server.update(data)
+            .then(() => {
+                fetchSettings()
+                    .then(() => window.flash(t('serverSettings.saved'), "green"))
+            });
+    };
 
     useEffect(() => {
         fetchSettings();
     }, []);
 
-    const formTypeField = (name, value, label = null) => {
+    const renderField = (name, value, label = null) => {
         if (name.startsWith("_comment_")) {
             return null;
         }
 
         switch (typeof value) {
-            case "undefined":
-                break;
-            case "function":
-                break;
-            case "symbol":
-                break;
-            case "bigint":
-                break;
             case "number":
-
-                if(numberInputs.indexOf(name) === -1) {
-                    setNumberInputs(old => [...old, name])
-                }
-
                 return (
                     <>
                         <Label htmlFor={name} text={label}/>
-                        <Input type="number" register={register} valueAsNumber="double" defaultValue={value} />
+                        <Input type="number" register={register(name, {valueAsNumber: true})} defaultValue={value} />
                     </>
-                )
+                );
             case "string":
                 if (name.includes("password")) {
                     return (
                         <>
                             <Label htmlFor={name} text={label}/>
-                            <InputPassword name={name} register={register} defaultValue={value}/>
+                            <InputPassword name={name} register={register(name)} defaultValue={value}/>
                         </>
-                    )
+                    );
                 } else {
                     return (
                         <>
                             <Label htmlFor={name} text={label}/>
-                            <Input name={name} register={register} defaultValue={value}/>
+                            <Input name={name} register={register(name)} defaultValue={value}/>
                         </>
-                    )
+                    );
                 }
             case "boolean":
                 return (
-                    <Checkbox checked={value} text={label} register={register} name={name}/>
-                )
+                    <Checkbox checked={value} text={label} register={register(name)} name={name}/>
+                );
             case "object":
                 if (Array.isArray(value)) {
                     return (
                         <>
                             <Label htmlFor={name} text={label}/>
-                            <Input name={name} register={register} defaultValue={value}/>
+                            <Input name={name} register={register(name)} defaultValue={value.join(',')}/>
                         </>
-                    )
+                    );
                 } else if (name.includes("visibility")) {
                     return (
                         <>
                             <Label text={t('serverSettings.visibility')}/>
                             <div className="flex">
-                                {Object.keys(value).map(key => <div className="mr-4" key={`visibility-${key}`}>
-                                    <Checkbox checked={value[key]} register={register} text={key} name={`visibility[${key}]`}/>
-                                </div>)}
+                                {Object.keys(value).map(key => (
+                                    <div className="mr-4" key={`visibility-${key}`}>
+                                        <Checkbox
+                                            checked={value[key]}
+                                            register={register('visibility-' + key)}
+                                            text={key}
+                                            name={'visibility-' + key}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </>
-                    )
+                    );
                 }
                 break;
             default:
                 return (
                     <>
                         <Label htmlFor={name} text={label}/>
-                        <Input name={name} register={register} defaultValue={value}/>
+                        <Input name={name} register={register(name)} defaultValue={value}/>
                     </>
-                )
+                );
         }
-    }
+    };
 
     return (
         <form className="mb-4" onSubmit={handleSubmit(saveServerSettings)}>
@@ -131,23 +125,19 @@ const ServerSettings = () => {
                     <>
                         {settings && Object.keys(settings).map(key => {
                             if (key.startsWith("_comment_")) {
-                                return (
-                                    <div key={key}>
-                                        {formTypeField(key, value)}
-                                    </div>
-                                );
+                                return null;
                             }
 
-                            const value = settings[key]
-                            const label = key.replaceAll('_', ' ')
-                            const comment = settings["_comment_" + key]
+                            const value = settings[key];
+                            const label = key.replaceAll('_', ' ');
+                            const comment = settings["_comment_" + key];
 
                             return (
                                 <div className="mb-4" key={`wrapper-${key}`}>
-                                    {formTypeField(key, value, label)}
+                                    {renderField(key, value, label)}
                                     <p className="text-sm italic">{comment}</p>
                                 </div>
-                            )
+                            );
                         })}
                     </>
                 }
@@ -156,7 +146,7 @@ const ServerSettings = () => {
                 }
             />
         </form>
-    )
-}
+    );
+};
 
 export default ServerSettings;
